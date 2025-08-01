@@ -365,7 +365,7 @@ def votar():
 def enviar_voto():
 
     referer = request.headers.get("Referer", "")
-    dominio_permitido = os.environ.get("AZURE_DOMAIN", "https://votacionciudadana-awh5gchrdna0fmgx.brazilsouth-01.azurewebsites.net")
+    dominio_permitido = os.environ.get("AZURE_DOMAIN", "votacionprimarias2025-g7ebaphpgrcucgbr.brazilsouth-01.azurewebsites.net")
 
     if dominio_permitido not in referer:
         return "Acceso no autorizado (referer inválido).", 403
