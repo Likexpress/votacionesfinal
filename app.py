@@ -462,7 +462,7 @@ def enviar_voto():
 def api_recintos():
     # Validación del dominio de origen (protección básica)
     referer = request.headers.get("Referer", "")
-    dominio_esperado = os.environ.get("AZURE_DOMAIN", "https://primariasbunker.org")
+    dominio_esperado = os.environ.get("AZURE_DOMAIN", "votacionprimarias2025-g7ebaphpgrcucgbr.brazilsouth-01.azurewebsites.net")
     
     if dominio_esperado not in referer:
         print(f"❌ Acceso denegado a /api/recintos desde Referer: {referer}")
