@@ -153,7 +153,7 @@ def whatsapp_webhook():
             if bloqueo.intentos < 4:
                 advertencia = (
                     "⚠️ Para recibir tu enlace de votación, primero debes registrarte en el portal oficial:\n\n"
-                    "👉 https://bit.ly/primariaBK\n\n"
+                    "👉 https://bit.ly/bkprimarias\n\n"
                     "Asegúrate de ingresar correctamente tu número de WhatsApp durante el registro, "
                     "ya que solo ese número podrá recibir el enlace.\n\n"
                     f"Advertencia {bloqueo.intentos}/3"
