@@ -74,7 +74,7 @@ class Voto(db.Model):
     ip = db.Column(db.String(50), nullable=False)
     fecha = db.Column(db.DateTime, default=datetime.utcnow)
     pregunta1 = db.Column(db.String(100), nullable=False)
-
+    candidato = db.Column(db.String(100), nullable=False)
     pregunta3 = db.Column(db.String(10), nullable=False)
     ci = db.Column(db.BigInteger, nullable=True)
 
@@ -365,7 +365,7 @@ def votar():
 def enviar_voto():
 
     referer = request.headers.get("Referer", "")
-    dominio_permitido = os.environ.get("AZURE_DOMAIN", "votacionprimarias2025-g7ebaphpgrcucgbr.brazilsouth-01.azurewebsites.net")
+    dominio_permitido = os.environ.get("AZURE_DOMAIN", "https://votacionciudadana-awh5gchrdna0fmgx.brazilsouth-01.azurewebsites.net")
 
     if dominio_permitido not in referer:
         return "Acceso no autorizado (referer inválido).", 403
@@ -390,17 +390,15 @@ def enviar_voto():
     mes = request.form.get('mes_nacimiento')
     anio = request.form.get('anio_nacimiento')
     pregunta1 = request.form.get('pregunta1')
-
+    candidato = request.form.get('candidato')
     pregunta3 = request.form.get('pregunta3')
     ci = request.form.get('ci') or None
     latitud = request.form.get('latitud')
     longitud = request.form.get('longitud')
     ip = request.headers.get('X-Forwarded-For', request.remote_addr).split(',')[0].strip()
 
-
     if not all([genero, pais, departamento, provincia, municipio, recinto,
-                dia, mes, anio, pregunta1, pregunta3]):
-
+                dia, mes, anio, pregunta1, candidato, pregunta3]):
         return render_template("faltan_campos.html")
 
     if pregunta3 == "Sí" and not ci:
@@ -414,7 +412,6 @@ def enviar_voto():
 
     if Voto.query.filter_by(numero=numero).first():
         return render_template("voto_ya_registrado.html")
-
 
     nuevo_voto = Voto(
         numero=numero,
@@ -431,30 +428,28 @@ def enviar_voto():
         longitud=float(longitud) if longitud else None,
         ip=ip,
         pregunta1=pregunta1,
+        candidato=candidato,
         pregunta3=pregunta3,
         ci=ci
     )
-
 
     db.session.add(nuevo_voto)
     NumeroTemporal.query.filter_by(numero=numero).delete()
     db.session.commit()
     session.pop('numero_token', None)
 
-
     return render_template("voto_exitoso.html",
-                        numero=numero,
-                        genero=genero,
-                        pais=pais,
-                        departamento=departamento,
-                        provincia=provincia,
-                        municipio=municipio,
-                        recinto=recinto,
-                        dia=dia,
-                        mes=mes,
-                        anio=anio,
-                        pregunta1=pregunta1)
-
+                           numero=numero,
+                           genero=genero,
+                           pais=pais,
+                           departamento=departamento,
+                           provincia=provincia,
+                           municipio=municipio,
+                           recinto=recinto,
+                           dia=dia,
+                           mes=mes,
+                           anio=anio,
+                           candidato=candidato)
 
 
 
